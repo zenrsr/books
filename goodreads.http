@@ -1,28 +1,33 @@
-###
-
 GET http://localhost:3000/books/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhaHVsMTIzIiwiaWF0IjoxNjkxNDIzNzYwfQ.a-oRPOFLcSVyHFftZseAGzbdp0vZG4ijHRSOdX5xBns
+
+###
+
+GET http://localhost:3000/books/1/
 
 ###
 
 POST http://localhost:3000/users/
 Content-Type: application/json
 
-{   
-    "name":"rahul",
-    "username":"rahul123",
+{    
+    "username": "rahul123",
     "password": "rahul@456",
-    "gender": "Male",
+    "gender":"male",
     "location":"hyderabad"
 }
-
 
 ###
 
 POST http://localhost:3000/login/
 Content-Type: application/json
 
-{
-    "username":"rahul123",
+{    
+    "username": "rahul123",
     "password": "rahul@456"
 }
+###
+
+// GET profile
+GET http://localhost:3000/profile/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhaHVsMTIzIiwiaWF0IjoxNjkxNDIzNzYwfQ.a-oRPOFLcSVyHFftZseAGzbdp0vZG4ijHRSOdX5xBns
