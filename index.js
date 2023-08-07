@@ -1,9 +1,10 @@
 const express = require("express");
 const path = require("path");
-const jwt = require("jsonwebtoken");
+
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(express.json());
@@ -31,24 +32,23 @@ initializeDBAndServer();
 // Get Books API
 app.get("/books/", async (request, response) => {
   try {
-    let jwtToken;
-    const authHeader = request.header["authorization"];
+    const authHeader = request.headers["authorization"];
     if (authHeader === undefined) {
-      response.status(401);
-      response.send("You are not authorized for this session");
+      response.status(401).send("Authorization not valid");
     } else {
-      jwtToken = authHeader.split(" ")[1];
-      jwt.verify(jwtToken, "tesla", async (error, payload) => {
+      const jwtToken = authHeader.split(" ")[1];
+      //   console.log(jwtToken);
+      jwt.verify(jwtToken, "lee", async (error, payload) => {
         if (error) {
-          response.status(401).send("Invalid Token Access");
+          response.status(401).send("Invalid access Token");
         } else {
           const getBooksQuery = `
-                    SELECT
-                        *
-                    FROM
-                        book
-                    ORDER BY
-                        book_id;`;
+                SELECT
+                    *
+                FROM
+                    book
+                ORDER BY
+                    book_id;`;
           const booksArray = await db.all(getBooksQuery);
           response.send(booksArray);
         }
@@ -109,9 +109,9 @@ app.post("/login/", async (request, response) => {
       response.send("Invalid User");
     } else {
       const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
-      const payload = { username: username };
-      const jwtToken = jwt.sign(payload, "tesla");
       if (isPasswordMatched === true) {
+        const payload = { username: username };
+        const jwtToken = await jwt.sign(payload, "lee");
         response.send({ jwtToken });
       } else {
         response.status(400);
